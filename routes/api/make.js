@@ -7,7 +7,6 @@ const Model = require("../../models/Model");
 const { validateMake } = require('../../models/Make');
 
 router.get('/', async (req, res) => {
-    console.log("gftrtytyfdutfub");
     const makes = await Make.find();
     res.send(makes);
 });
