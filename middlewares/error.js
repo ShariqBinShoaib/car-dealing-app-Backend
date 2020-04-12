@@ -1,4 +1,4 @@
 module.exports = function (err, req, res, next) {
-    console.log(err);
-    res.status(500).send('Something Failed');
+  console.log("Error Middleware: ", err);
+  res.status(500).send("Something Failed");
 };
