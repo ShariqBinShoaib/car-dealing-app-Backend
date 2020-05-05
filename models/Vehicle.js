@@ -2,9 +2,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Joi = require("@hapi/joi");
 
+const { modelSchema } = require("./Model");
 const { featureSchema } = require("./Feature");
 
 const vehicleSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   make: {
     type: new Schema({
       name: {
@@ -16,13 +21,7 @@ const vehicleSchema = new Schema({
     required: true,
   },
   model: {
-    type: new Schema({
-      name: {
-        type: String,
-        maxlength: 255,
-        required: true,
-      },
-    }),
+    type: modelSchema,
     required: true,
   },
   year: {
@@ -93,6 +92,9 @@ const vehicleSchema = new Schema({
 
 const validateVehicle = function (vehicle) {
   const schema = Joi.object({
+    user: Joi.string()
+      .regex(/^[a-fA-F0-9]{24}$/)
+      .required(),
     make: Joi.object({
       name: Joi.string().max(255).required(),
     }),

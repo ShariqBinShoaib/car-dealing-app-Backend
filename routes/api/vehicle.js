@@ -1,5 +1,4 @@
 const express = require("express");
-const { parse } = require("querystring");
 const fs = require("fs");
 const router = express.Router();
 
@@ -98,7 +97,7 @@ router.post(
 router.put(
   "/:id",
   asyncMiddleware(async (req, res) => {
-    multipleImagesUploader(req, res, (err) => {
+    multipleImagesUploader(req, res, async (err) => {
       if (err) return res.status(400).send(err);
       if (!req.files) return res.status(400).send("Error: No file selected");
 
@@ -119,7 +118,6 @@ router.put(
           res.send(result);
         }
       );
-
     });
   })
 );

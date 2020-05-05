@@ -1,5 +1,11 @@
 const express = require("express");
 const app = express();
+// const config = require("config");
+
+// if (!config.get("jwtPrivateKey")) {
+//   console.error("FATAL ERROR: jwtPrivateKey is not defined.");
+//   process.exit(1);
+// }
 
 app.get("/test", (req, res) => {
   res.send("Hello World");
