@@ -29,4 +29,23 @@ router.post(
   })
 );
 
+router.put(
+  "/:id",
+  [auth, admin],
+  asyncMiddleware(async (req, res) => {
+    const result = await Feature.findByIdAndUpdate(req.params.id, {
+      name: req.body.name,
+    });
+    res.send(result);
+  })
+);
+router.delete(
+  "/:id",
+  [auth, admin],
+  asyncMiddleware(async (req, res) => {
+    const result = await Feature.findByIdAndDelete(req.params.id);
+    res.send(result);
+  })
+);
+
 module.exports = router;
