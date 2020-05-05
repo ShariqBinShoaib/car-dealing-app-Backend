@@ -2,6 +2,8 @@ const express = require("express");
 const fs = require("fs");
 const router = express.Router();
 
+const auth = require("../../middlewares/auth");
+
 const Make = require("../../models/Make");
 const Feature = require("../../models/Feature");
 
@@ -14,17 +16,19 @@ const multipleImagesUploader = require("../../helpers/imagesUploader");
 
 router.get(
   "/",
+  auth,
   asyncMiddleware(async (req, res) => {
-    const vehicles = await Vehicle.find();
+    const vehicles = await Vehicle.find({ user: req.user.id });
+    if (!vehicles) return res.status(404).send("No vehicle found.a");
     res.send(vehicles);
   })
 );
 
 router.post(
   "/add",
+  auth,
   asyncMiddleware(async (req, res) => {
     singleImageUploader(req, res, async (err) => {
-      console.log(req.body);
       const make = await Make.findById(req.body.makeId);
       if (!make) {
         removeFile(req.file.path);
@@ -45,7 +49,6 @@ router.post(
         removeFile(req.file.path);
         return res.status(400).send("No feature found!");
       }
-      console.log(features);
       //   const vehicleFeatures = features.filter((feature) =>
       //     req.body.featuresId.includes(feature._id.toString())
       //   );
@@ -58,6 +61,7 @@ router.post(
       if (!req.file) return res.status(400).send("Error: No file selected");
 
       const newVehicle = {
+        user: req.user.id,
         make: {
           _id: make._id,
           name: make.name,
@@ -96,6 +100,7 @@ router.post(
 
 router.put(
   "/:id",
+  auth,
   asyncMiddleware(async (req, res) => {
     multipleImagesUploader(req, res, async (err) => {
       if (err) return res.status(400).send(err);
@@ -122,6 +127,21 @@ router.put(
   })
 );
 
+router.delete(
+  "/:id",
+  auth,
+  asyncMiddleware(async (req, res) => {
+    const vehicle = await Vehicle.findById(req.params.id);
+    if (!vehicle) return res.status(400).send("Already Deleted");
+
+    const result = await Vehicle.deleteOne({ _id: req.params.id });
+
+    removeFile(vehicle.vehicleDp.path);
+    vehicle.vehicleImages.forEach((image) => removeFile(image.path));
+
+    res.send(result);
+  })
+);
 module.exports = router;
 
 function removeFile(path) {

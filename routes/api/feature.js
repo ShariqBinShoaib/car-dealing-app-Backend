@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+const auth = require("../../middlewares/auth");
+const admin = require("../../middlewares/admin");
+
 const asyncMiddleware = require("../../middlewares/async");
 const Feature = require("../../models/Feature");
 const { validateFeature } = require("../../models/Feature");
@@ -15,6 +18,7 @@ router.get(
 
 router.post(
   "/add",
+  [auth, admin],
   asyncMiddleware(async (req, res) => {
     const { error } = validateFeature(req.body);
     if (error) return res.status(400).send(error.details[0].message);

@@ -34,9 +34,10 @@ const userSchema = new Schema({
 
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
-    { id: this._id, name: this.name, email: this.email, isAdmin: this.isAdmin },
+    { id: this._id, name: this.name, isAdmin: this.isAdmin },
     //   config.get("jwtPrivateKey")
-    "jwtPrivateKey"
+    "jwtPrivateKey",
+    { expiresIn: 60 * 60 * 60 }
   );
   return token;
 };

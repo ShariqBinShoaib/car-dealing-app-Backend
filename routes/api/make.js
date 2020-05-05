@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+const auth = require("../../middlewares/auth");
+const admin = require("../../middlewares/admin");
+
 const asyncMiddleware = require("../../middlewares/async");
 const Make = require("../../models/Make");
 const Model = require("../../models/Model");
@@ -16,16 +19,16 @@ router.get(
 
 router.post(
   "/add",
+  [auth, admin],
   asyncMiddleware(async (req, res) => {
     console.log(req.body);
-    const newModels = [];
-    req.body.models.forEach((element) => {
-      newModels.push(new Model({ name: element }));
-    });
+    const models = req.body.models.map(
+      (modelName) => new Model({ name: modelName }) // Convert array of string items into array of mongoose object
+    );
 
     const newMake = {
       name: req.body.name,
-      models: newModels,
+      models,
     };
 
     console.log(newMake);
