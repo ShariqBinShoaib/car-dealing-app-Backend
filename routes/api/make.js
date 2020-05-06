@@ -19,7 +19,6 @@ router.get(
 
 router.post(
   "/add",
-  [auth, admin],
   asyncMiddleware(async (req, res) => {
     console.log(req.body);
     const models = req.body.models.map(
@@ -42,4 +41,74 @@ router.post(
   })
 );
 
+// Update name of Make
+router.put(
+  "/:id",
+  asyncMiddleware(async (req, res) => {
+    const result = await Make.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name,
+      },
+      { new: true }
+    );
+    res.send(result);
+  })
+);
+
+// Update specific model
+router.put(
+  "/:makeId/models/:modelId",
+  asyncMiddleware(async (req, res) => {
+    const result = await Make.findOneAndUpdate(
+      { _id: req.params.makeId, "models._id": req.params.modelId },
+      {
+        $set: {
+          "models.$.name": req.body.name,
+        },
+      },
+      { new: true }
+    );
+    res.send(result);
+  })
+);
+
+// Add new model
+router.put(
+  "/:id/models",
+  asyncMiddleware(async (req, res) => {
+    const result = await Make.findOneAndUpdate(
+      { _id: req.params.id },
+      { $addToSet: { models: new Model({ name: req.body.name }) } },
+      { new: true }
+    );
+    res.send(result);
+  })
+);
+
+// Delete Make
+router.delete(
+  "/:id",
+  asyncMiddleware(async (req, res) => {
+    const result = await Make.findByIdAndDelete(req.params.id);
+    res.send(result);
+  })
+);
+
+// Delete specific model
+router.delete(
+  "/:makeId/models/:modelId",
+  asyncMiddleware(async (req, res) => {
+    const result = await Make.findOneAndUpdate(
+      { _id: req.params.makeId },
+      {
+        $pull: {
+          models: { _id: req.params.modelId },
+        },
+      },
+      { new: true }
+    );
+    res.send(result);
+  })
+);
 module.exports = router;
