@@ -19,6 +19,7 @@ router.get(
 
 router.post(
   "/add",
+  [auth, admin],
   asyncMiddleware(async (req, res) => {
     console.log(req.body);
     const models = req.body.models.map(
@@ -44,6 +45,7 @@ router.post(
 // Update name of Make
 router.put(
   "/:id",
+  [auth, admin],
   asyncMiddleware(async (req, res) => {
     const result = await Make.findByIdAndUpdate(
       req.params.id,
@@ -59,6 +61,7 @@ router.put(
 // Update specific model
 router.put(
   "/:makeId/models/:modelId",
+  [auth, admin],
   asyncMiddleware(async (req, res) => {
     const result = await Make.findOneAndUpdate(
       { _id: req.params.makeId, "models._id": req.params.modelId },
@@ -76,6 +79,7 @@ router.put(
 // Add new model
 router.put(
   "/:id/models",
+  [auth, admin],
   asyncMiddleware(async (req, res) => {
     const result = await Make.findOneAndUpdate(
       { _id: req.params.id },
@@ -89,6 +93,7 @@ router.put(
 // Delete Make
 router.delete(
   "/:id",
+  [auth, admin],
   asyncMiddleware(async (req, res) => {
     const result = await Make.findByIdAndDelete(req.params.id);
     res.send(result);
@@ -98,6 +103,7 @@ router.delete(
 // Delete specific model
 router.delete(
   "/:makeId/models/:modelId",
+  [auth, admin],
   asyncMiddleware(async (req, res) => {
     const result = await Make.findOneAndUpdate(
       { _id: req.params.makeId },
