@@ -9,6 +9,7 @@ const vehicleSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   make: {
     type: new Schema({
@@ -94,6 +95,7 @@ const validateVehicle = function (vehicle) {
   const schema = Joi.object({
     user: Joi.string()
       .regex(/^[a-fA-F0-9]{24}$/)
+      .message("Invalid object ID")
       .required(),
     make: Joi.object({
       name: Joi.string().max(255).required(),
