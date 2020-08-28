@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();
+const isEmpty = require("../../helpers/isEmpty");
 
 const auth = require("../../middlewares/auth");
 
@@ -16,10 +17,19 @@ const multipleImagesUploader = require("../../helpers/imagesUploader");
 
 router.get(
   "/",
+  asyncMiddleware(async (req, res) => {
+    const vehicles = await Vehicle.find();
+    if (isEmpty(vehicles)) return res.status(404).send("No vehicle found");
+    res.send(vehicles);
+  })
+);
+
+router.get(
+  "/loggedin-user",
   auth,
   asyncMiddleware(async (req, res) => {
     const vehicles = await Vehicle.find({ user: req.user.id });
-    if (!vehicles) return res.status(404).send("No vehicle found.a");
+    if (isEmpty(vehicles)) return res.status(404).send("No vehicle found.");
     res.send(vehicles);
   })
 );
