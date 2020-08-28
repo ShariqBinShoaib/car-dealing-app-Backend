@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 
 const { modelSchema } = require("./Model");
 const { featureSchema } = require("./Feature");
@@ -39,6 +39,10 @@ const vehicleSchema = new Schema({
   },
   isRegistered: {
     type: Boolean,
+    required: true,
+  },
+  description: {
+    type: String,
     required: true,
   },
   contactName: {
@@ -109,6 +113,7 @@ const validateVehicle = function (vehicle) {
       }).required()
     ),
     isRegistered: Joi.bool().required(),
+    description: Joi.string().required(),
     contactName: Joi.string().max(255).required(),
     contactPhone: Joi.string().max(255).required(),
     contactEmail: Joi.string().max(255).required(),
