@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 
 const { modelSchema } = require("./Model");
 

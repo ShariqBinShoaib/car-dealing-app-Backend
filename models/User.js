@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 // const config = require("config");
 
@@ -37,7 +37,7 @@ userSchema.methods.generateAuthToken = function () {
     { id: this._id, name: this.name, isAdmin: this.isAdmin },
     //   config.get("jwtPrivateKey")
     "jwtPrivateKey",
-    { expiresIn: 60 * 60 * 60 }
+    { expiresIn: "1d" }
   );
   return token;
 };

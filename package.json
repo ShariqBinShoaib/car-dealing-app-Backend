@@ -4,15 +4,15 @@
   "description": "A simple car dealing app",
   "main": "index.js",
   "dependencies": {
-    "@hapi/joi": "^16.1.8",
-    "bcrypt": "^3.0.8",
+    "bcrypt": "^5.0.0",
     "config": "^3.3.1",
     "corn": "^0.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "joi": "^17.2.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.19",
-    "mongoose": "^5.9.25",
+    "mongoose": "^5.10.1",
     "multer": "^1.4.2"
   },
   "devDependencies": {},

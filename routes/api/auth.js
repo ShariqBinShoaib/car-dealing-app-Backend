@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 
 const asyncMiddleware = require("../../middlewares/async");
 const User = require("../../models/User");
